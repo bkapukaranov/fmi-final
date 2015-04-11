@@ -3,8 +3,8 @@ __author__ = 'Borislav Kapukaranov'
 import codecs
 import os
 
-OUTPUT_TSV = "/Users/inspir3d/FMI/MasterDiploma/cinexio_movie_reviews_test.tsv"
-CINEXIO_RAW_MOVIE_DATA_PATH = '/Users/inspir3d/FMI/MasterDiploma/cinexio_raw_movie_data_test'
+OUTPUT_TSV = "/Users/inspir3d/FMI/MasterDiploma/fmi-final/cinexio_movie_reviews_11_04.tsv"
+CINEXIO_RAW_MOVIE_DATA_PATH = '/Users/inspir3d/FMI/MasterDiploma/fmi-final/cinexio_raw_movie_data_11_04'
 SEPARATOR = "\t"
 
 def parse_review(response):

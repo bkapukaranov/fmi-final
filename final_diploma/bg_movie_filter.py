@@ -3,8 +3,12 @@ __author__ = 'Borislav Kapukaranov'
 import codecs
 from alphabet_detector import AlphabetDetector
 
-REVIEWS_FILTERED_TSV = '/Users/inspir3d/FMI/MasterDiploma/cinexio_movie_reviews_filtered.tsv'
-REVIEWS_TSV = '/Users/inspir3d/FMI/MasterDiploma/cinexio_movie_reviews.tsv'
+REVIEWS_FILTERED_TSV = '/Users/inspir3d/FMI/MasterDiploma/fmi-final/cinexio_movie_reviews_filtered.tsv'
+REVIEWS_TSV = '/Users/inspir3d/FMI/MasterDiploma/fmi-final/cinexio_movie_reviews.tsv'
+
+INPUT_BASE = '/Users/inspir3d/FMI/MasterDiploma/fmi-final/data/raw_reviews'
+INPUT = ['cinexio_movie_reviews.tsv']
+OUTPUT = '/Users/inspir3d/FMI/MasterDiploma/fmi-final/data/cinexio_movie_reviews_filtered.tsv'
 
 SEPARATOR = "\t"
 movie_total = 0
