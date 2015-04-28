@@ -52,16 +52,12 @@ def get_movies_as_dict(input_base, input):
     return movie_to_reviews
 
 
-def build_lexicon(input_base, input):
+def build_lexicon_poles(input, input_base):
     movies = get_movies_as_dict(input_base, input)
-
     opinion_border = float(3)
-
     dictionary = {}
     class_count = {'positive': 0, 'negative': 0, 'neutral': 0}
-
     review_count = 0
-
     for movie_name in movies:
         for review_pair in movies[movie_name][1]:
             review_text = review_pair[0]
@@ -74,15 +70,15 @@ def build_lexicon(input_base, input):
             else:
                 class_count['negative'] += 1
 
-            tokens = review_text.replace(':)', '')\
-                .replace('.', '')\
-                .replace(',', '')\
-                .replace('?', '')\
-                .replace('!', '')\
-                .replace('(', '')\
-                .replace(')', '')\
-                .replace('--', '-')\
-                .replace('"', '')\
+            tokens = review_text.replace(':)', '') \
+                .replace('.', '') \
+                .replace(',', '') \
+                .replace('?', '') \
+                .replace('!', '') \
+                .replace('(', '') \
+                .replace(')', '') \
+                .replace('--', '-') \
+                .replace('"', '') \
                 .lower().split(" ")
 
             for token in tokens:
@@ -104,20 +100,21 @@ def build_lexicon(input_base, input):
                         dictionary[token] = (1, 1, 0)
                     if review_rating < opinion_border:
                         dictionary[token] = (1, 0, 1)
-
     positive_list = []
     negative_list = []
     for word in dictionary:
         if '#' in word or word == '':
             continue
         positive_divident = get_prob(float(dictionary[word][1]), float(review_count))
-        positive_divider = get_prob(float(dictionary[word][0]), float(review_count)) * get_prob(float(class_count['positive']), float(review_count))
+        positive_divider = get_prob(float(dictionary[word][0]), float(review_count)) * get_prob(
+            float(class_count['positive']), float(review_count))
         positive_pmi = 0
         if positive_divider != 0 and positive_divident != 0:
-            positive_pmi = math.log(positive_divident/positive_divider)
+            positive_pmi = math.log(positive_divident / positive_divider)
 
         negative_divident = get_prob(float(dictionary[word][2]), float(review_count))
-        negative_divider = get_prob(float(dictionary[word][0]), float(review_count)) * get_prob(float(class_count['negative']), float(review_count))
+        negative_divider = get_prob(float(dictionary[word][0]), float(review_count)) * get_prob(
+            float(class_count['negative']), float(review_count))
         negative_pmi = 0
         if negative_divider != 0 and negative_divident != 0:
             negative_pmi = math.log(negative_divident / negative_divider)
@@ -127,9 +124,14 @@ def build_lexicon(input_base, input):
             positive_list.append((word, semantic_orientation))
         if semantic_orientation < 0:
             negative_list.append((word, semantic_orientation))
-
     sorted_positive = sorted(positive_list, key=lambda tup: tup[1], reverse=True)
     sorted_negative = sorted(negative_list, key=lambda tup: tup[1])
+    return sorted_negative, sorted_positive
+
+
+def save_lexicon(input_base, input):
+    sorted_negative, sorted_positive = build_lexicon_poles(input, input_base)
+
     print len(sorted_positive)
     print len(sorted_negative)
 
@@ -155,7 +157,7 @@ def get_prob(divident, divider):
         return divident / divider
 
 if __name__ == '__main__':
-    build_lexicon(INPUT_BASE, INPUT)
+    save_lexicon(INPUT_BASE, INPUT)
     # movies = get_movies_as_dict(INPUT_BASE, INPUT)
 
     # review = 0
