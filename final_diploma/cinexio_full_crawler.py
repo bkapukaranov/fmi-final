@@ -3,7 +3,7 @@ __author__ = 'Borislav Kapukaranov'
 import scrapy
 import review_parser
 
-# run with: scrapy runspider -s AUTOTHROTTLE_ENABLED=1 -s DOWNLOAD_DELAY=1 cinexio_homepage_crawler.py
+# run with: scrapy runspider -s AUTOTHROTTLE_ENABLED=1 -s DOWNLOAD_DELAY=1 cinexio_full_crawler.py
 
 class CinexioSpider(scrapy.Spider):
 
