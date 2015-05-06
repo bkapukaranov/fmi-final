@@ -1,0 +1,192 @@
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+lexicon scores, bag of words
+len x: 10198
+# features: 8408
+global_dict len 8406
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 0.747475
+Cross Validation Squared correlation coefficient = 0.575395
+
+13 -- L2-regularized L1-loss support vector regression (dual) - 5 fold CV
+lexicon scores, bag of words
+len x: 10198
+# features: 8408
+global_dict len 8406
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 0.89125
+Cross Validation Squared correlation coefficient = 0.524047
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+lexicon scores
+len x: 10198
+# features: 2
+global_dict len 8406
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 5.46023
+Cross Validation Squared correlation coefficient = 0.122279
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+lexicon scores, bag of words, emoticons
+len x: 10198
+# features: 8608
+global_dict len 8406
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 0.745388
+Cross Validation Squared correlation coefficient = 0.57752
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+lexicon scores, bag of words, emoticons, bigrams
+len x: 10198
+# features: 26589
+global_dict len 8406
+global_bigrams len 17981
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 0.746491
+Cross Validation Squared correlation coefficient = 0.5882
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+length
+len x: 10198
+# features: 1
+global_dict len 8406
+global_bigrams len 17981
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 2.44654
+Cross Validation Squared correlation coefficient = 0.000907257
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+length, director
+len x: 10198
+# features: 318
+global_dict len 8406
+global_bigrams len 17981
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 2.44653
+Cross Validation Squared correlation coefficient = 0.000907289
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+length, director, actors
+len x: 10198
+# features: 1986
+global_dict len 8406
+global_bigrams len 17981
+global_directors len 317
+global_actors len 1668
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 2.44651
+Cross Validation Squared correlation coefficient = 0.000907473
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+length, director, actors, country
+len x: 10198
+# features: 2035
+global_dict len 8406
+global_bigrams len 17981
+global_directors len 317
+global_actors len 1668
+global_countries len 49
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 2.44645
+Cross Validation Squared correlation coefficient = 0.000907271
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+length, director, actors, country, genres
+len x: 10198
+# features: 2058
+global_dict len 8406
+global_bigrams len 17981
+global_directors len 317
+global_actors len 1668
+global_countries len 49
+global_genres len 23
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 2.44639
+Cross Validation Squared correlation coefficient = 0.000907442
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+length, director, actors, country, genres, user_ave_ratings
+len x: 10198
+# features: 2059
+global_dict len 8406
+global_bigrams len 17981
+global_directors len 317
+global_actors len 1668
+global_countries len 49
+global_genres len 23
+global_user_ave len 3395
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 1.00718
+Cross Validation Squared correlation coefficient = 0.416955
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+length, director, actors, country, genres, user_ave_ratings, imdb_score
+len x: 10198
+# features: 2060
+global_dict len 8406
+global_bigrams len 17981
+global_directors len 317
+global_actors len 1668
+global_countries len 49
+global_genres len 23
+global_user_ave len 3395
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 0.990904
+Cross Validation Squared correlation coefficient = 0.430709
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+length, director, actors, country, genres, user_ave_ratings, imdb_score, cinexio_score
+len x: 10198
+# features: 2061
+global_dict len 8406
+global_bigrams len 17981
+global_directors len 317
+global_actors len 1668
+global_countries len 49
+global_genres len 23
+global_user_ave len 3395
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 0.939626
+Cross Validation Squared correlation coefficient = 0.453564
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+lexicon scores, bag of words, emoticons, length, user_ave_ratings, imdb_score, cinexio_score
+len x: 10198
+# features: 8612
+global_dict len 8406
+global_bigrams len 17981
+global_directors len 317
+global_actors len 1668
+global_countries len 49
+global_genres len 23
+global_user_ave len 3395
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 0.514694
+Cross Validation Squared correlation coefficient = 0.698917
