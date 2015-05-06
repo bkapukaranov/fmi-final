@@ -14,7 +14,8 @@ OUTPUT = '/Users/inspir3d/FMI/MasterDiploma/fmi-final/data/cinexio_movie_reviews
 TSV_SEPARATOR = "\t"
 FILE_SEPARATOR = "/"
 
-def get_movies_as_dict(input_base, input):
+
+def get_movies_as_dict_old(input_base, input):
     movie_to_reviews = dict()
 
     alphabet_detector = AlphabetDetector()
@@ -34,7 +35,9 @@ def get_movies_as_dict(input_base, input):
                 if len(clean_line) > 2:
                     # collect old movie if it has any bg reviews
                     if len(current) > 0:
-                        movie_to_reviews[movie_name] = (movie_name + TSV_SEPARATOR + cinexio_rating + TSV_SEPARATOR + cinexio_url + TSV_SEPARATOR + imdb_url + TSV_SEPARATOR + imdb_rating, set())
+                        movie_to_reviews[movie_name] = (
+                            movie_name + TSV_SEPARATOR + cinexio_rating + TSV_SEPARATOR + cinexio_url + TSV_SEPARATOR + imdb_url + TSV_SEPARATOR + imdb_rating,
+                            set())
                         for pair in current:
                             movie_to_reviews[movie_name][1].add(pair)
                     # read next one
@@ -52,8 +55,66 @@ def get_movies_as_dict(input_base, input):
     return movie_to_reviews
 
 
+def movies_as_list(input_base, input):
+    movie_to_reviews = []
+
+    for file in input:
+        with codecs.open(input_base + FILE_SEPARATOR + file, 'r', encoding="utf-8") as f:
+            movie_name = 'null'
+            cinexio_rating = 'null'
+            cinexio_url = 'null'
+            imdb_url = 'null'
+            imdb_rating = 'null'
+            director = 'null'
+            actors = 'null'
+            country = 'null'
+            genres = 'null'
+            length = 'null'
+
+            current = list()
+
+            for line in f:
+                clean_line = line.strip().split(TSV_SEPARATOR)
+                if len(clean_line) == 10:
+                    # collect old movie if it has any bg reviews
+                    if len(current) > 0:
+                        movie_to_reviews.append({'name': movie_name,
+                                                 'cinexio_rating': cinexio_rating,
+                                                 'cinexio_url': cinexio_url,
+                                                 'imdb_url': imdb_url,
+                                                 'imdb_rating': imdb_rating,
+                                                 'director': director,
+                                                 'actors': actors.split(', '),
+                                                 'country': country,
+                                                 'genres': genres.split(', '),
+                                                 'length': length,
+                                                 'reviews': []})
+                    for r_dict in current:
+                        movie_to_reviews[-1]['reviews'].append(r_dict)
+                    # read next one
+                    movie_name = clean_line[0]
+                    cinexio_rating = clean_line[1]
+                    cinexio_url = clean_line[2]
+                    imdb_url = clean_line[3]
+                    imdb_rating = clean_line[4]
+                    director = clean_line[5]
+                    actors = clean_line[6]
+                    country = clean_line[7]
+                    genres = clean_line[8]
+                    length = clean_line[9]
+                    current = list()
+                if len(clean_line) == 4:
+                    reviewer_name = clean_line[0]
+                    review_text = clean_line[1]
+                    review_rating = clean_line[2]
+                    review_date = clean_line[3][:-1]
+                    current.append({'r_name': reviewer_name, 'r_text': review_text, 'r_rating': review_rating, 'r_date': review_date})
+
+    return movie_to_reviews
+
+
 def build_lexicon_poles(input, input_base):
-    movies = get_movies_as_dict(input_base, input)
+    movies = get_movies_as_dict_old(input_base, input)
     opinion_border = float(3)
     dictionary = {}
     class_count = {'positive': 0, 'negative': 0, 'neutral': 0}
@@ -156,12 +217,13 @@ def get_prob(divident, divider):
     else:
         return divident / divider
 
+
 if __name__ == '__main__':
     save_lexicon(INPUT_BASE, INPUT)
     # movies = get_movies_as_dict(INPUT_BASE, INPUT)
 
     # review = 0
     # for movie in movies:
-    #     review += len(movies[movie][1])
+    # review += len(movies[movie][1])
     #
     # print review
