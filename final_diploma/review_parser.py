@@ -3,8 +3,8 @@ __author__ = 'Borislav Kapukaranov'
 import codecs
 import os
 
-OUTPUT_TSV = "/Users/inspir3d/FMI/MasterDiploma/fmi-final/cinexio_movie_reviews_28_04.tsv"
-CINEXIO_RAW_MOVIE_DATA_PATH = '/Users/inspir3d/FMI/MasterDiploma/fmi-final/cinexio_raw_movie_data_28_04'
+OUTPUT_TSV = "/Users/inspir3d/FMI/MasterDiploma/fmi-final/cinexio_movie_reviews_train_full2_3.tsv"
+CINEXIO_RAW_MOVIE_DATA_PATH = '/Users/inspir3d/FMI/MasterDiploma/fmi-final/cinexio_raw_movie_data_train_full2_3'
 SEPARATOR = "\t"
 
 

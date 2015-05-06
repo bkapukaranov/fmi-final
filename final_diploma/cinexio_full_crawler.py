@@ -11,7 +11,7 @@ class CinexioSpider(scrapy.Spider):
     allowed_domains = ['cinexio.com']
 
     # use for full site crawl
-    start_urls = ['http://www.cinexio.com/sofia/movie/%d' %(n) for n in range(0, 25000)]
+    start_urls = ['http://www.cinexio.com/sofia/movie/%d' %(n) for n in range(3680, 30000)]
 
     def parse(self, response):
         review_parser.parse_review(response)
