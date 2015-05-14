@@ -1,9 +1,12 @@
 __author__ = 'inspir3d'
 
+import math
 import codecs
 import review_util
 from liblinearutil import *
 from random import randint
+import numpy as np
+import ordinal_logistic
 
 INPUT_BASE = '/Users/inspir3d/FMI/MasterDiploma/fmi-final/data/raw_reviews'
 INPUT = ['cinexio_movie_reviews_full_filtered.tsv']
@@ -18,7 +21,7 @@ LEXICON_POSITIVE = 'positive.txt'
 LEXICON_NEGATIVE = 'negative.txt'
 TSV_SEPARATOR = "\t"
 FILE_SEPARATOR = "/"
-NEGATIVE_BOUNDARY = 2.5
+NEGATIVE_BOUNDARY = 2.0
 POSITIVE_BOUNDARY = 3.5
 
 
@@ -31,7 +34,12 @@ def add_vector_class(vector, review_rating):
     vector.append(vector_class)
 
 def add_vector_regression_score(vector, review_rating):
-    vector.append(review_rating)
+    if review_rating >= POSITIVE_BOUNDARY:
+        vector.append(2.0)
+    elif POSITIVE_BOUNDARY > review_rating >= NEGATIVE_BOUNDARY:
+        vector.append(1.0)
+    else:
+        vector.append(0.0)
 
 
 def get_clean_tokens(review_text):
@@ -244,17 +252,7 @@ def add_user_ave(user_ave_rating, vector):
     vector.append(user_ave_rating)
 
 
-def run_liblinear_kfold(movies, negative_lex, positive_lex, params):
-
-    global_word_list = get_globals(movies)
-    neg_emoticons, pos_emoticons = get_emoticon_lists()
-    global_bigrams = get_bigrams(movies)
-    global_directors = get_directors(movies)
-    global_actors = get_actors(movies)
-    global_countries = get_countries(movies)
-    global_genres = get_genres(movies)
-    global_user_ave = get_user_average_rating(movies)
-
+def getX_Y(global_user_ave, global_word_list, movies, neg_emoticons, negative_lex, pos_emoticons, positive_lex):
     y = []
     x = []
     for movie_dict in movies:
@@ -288,6 +286,62 @@ def run_liblinear_kfold(movies, negative_lex, positive_lex, params):
                 write_vector(out, review_rating, vector)
 
             x.append(vector)
+    return x, y
+
+
+def run_liblinear(train_movies, test_movies, global_movies, negative_lex, positive_lex, params):
+
+    global_word_list = get_globals(global_movies)
+    neg_emoticons, pos_emoticons = get_emoticon_lists()
+    global_bigrams = get_bigrams(global_movies)
+    global_directors = get_directors(global_movies)
+    global_actors = get_actors(global_movies)
+    global_countries = get_countries(global_movies)
+    global_genres = get_genres(global_movies)
+    global_user_ave = get_user_average_rating(global_movies)
+
+    trainx, trainy = getX_Y(global_user_ave, global_word_list, train_movies, neg_emoticons, negative_lex, pos_emoticons, positive_lex)
+    testx, testy = getX_Y(global_user_ave, global_word_list, test_movies, neg_emoticons, negative_lex, pos_emoticons, positive_lex)
+    print 'len train x: ' + str(len(trainx))
+    print 'len test x: ' + str(len(testx))
+    print '# features: ' + str(len(trainx[0]))
+    print 'global_dict len ' + str(len(global_word_list))
+    print 'global_bigrams len ' + str(len(global_bigrams))
+    print 'global_directors len ' + str(len(global_directors))
+    print 'global_actors len ' + str(len(global_actors))
+    print 'global_countries len ' + str(len(global_countries))
+    print 'global_genres len ' + str(len(global_genres))
+    print 'global_user_ave len ' + str(len(global_user_ave))
+    print 'emo pos len: ' + str(len(pos_emoticons))
+    print 'emo neg len: ' + str(len(neg_emoticons))
+    # print 'total set len ' + str(len(train_movies))
+    #print 'final MSE: ' + str(MSE)
+
+    model = train(trainy, trainx, params)
+    p_labs, p_acc, p_vals = predict(testy, testx, model)
+
+    ME = 0.0
+    for index in range(0, len(p_labs)):
+        ME += (testy[index] - p_labs[index]) * (testy[index] - p_labs[index])
+    MSE = ME / len(p_labs)
+
+    print testy
+    print p_labs
+    return MSE
+
+
+def run_liblinear_kfold(movies, negative_lex, positive_lex, params):
+
+    global_word_list = get_globals(movies)
+    neg_emoticons, pos_emoticons = get_emoticon_lists()
+    global_bigrams = get_bigrams(movies)
+    global_directors = get_directors(movies)
+    global_actors = get_actors(movies)
+    global_countries = get_countries(movies)
+    global_genres = get_genres(movies)
+    global_user_ave = get_user_average_rating(movies)
+
+    x, y = getX_Y(global_user_ave, global_word_list, movies, neg_emoticons, negative_lex, pos_emoticons, positive_lex)
     print 'len x: ' + str(len(x))
     print '# features: ' + str(len(x[0]))
     print 'global_dict len ' + str(len(global_word_list))
@@ -301,7 +355,64 @@ def run_liblinear_kfold(movies, negative_lex, positive_lex, params):
     print 'emo neg len: ' + str(len(neg_emoticons))
     print 'total set len ' + str(len(movies))
     #print 'final MSE: ' + str(MSE)
+
     MSE = train(y, x, params)
+
+    print "linear MSE: " + str(MSE)
+
+
+def run_ordinal(movies, negative_lex, positive_lex):
+    from sklearn import cross_validation
+
+    global_word_list = get_globals(movies)
+    neg_emoticons, pos_emoticons = get_emoticon_lists()
+    global_user_ave = get_user_average_rating(movies)
+
+    Xa, ya = getX_Y(global_user_ave, global_word_list, movies, neg_emoticons, negative_lex, pos_emoticons, positive_lex)
+    X = np.asarray(Xa)
+    y = np.round(ya)
+    y -= y.min()
+
+    idx = np.argsort(y)
+    X = X[idx]
+    y = y[idx]
+    cv = cross_validation.ShuffleSplit(y.size, n_iter=5, test_size=.1, random_state=0)
+    score_ordinal_logistic = []
+    for i, (train, test) in enumerate(cv):
+        #test = train
+        if not np.all(np.unique(y[train]) == np.unique(y)):
+            # we need the train set to have all different classes
+            continue
+        assert np.all(np.unique(y[train]) == np.unique(y))
+        train = np.sort(train)
+        test = np.sort(test)
+        w, theta = ordinal_logistic.ordinal_logistic_fit(X[train], y[train], verbose=True,
+                                        solver='TNC')
+        pred = ordinal_logistic.ordinal_logistic_predict(w, theta, X[test])
+        s = ordinal_logistic.metrics.mean_squared_error(y[test], pred)
+        print('ERROR (ORDINAL)  fold %s: %s' % (i+1, s))
+        score_ordinal_logistic.append(s)
+
+    print('MEAN SQUARED ERROR (ORDINAL LOGISTIC):    %s' % np.mean(score_ordinal_logistic))
+
+
+def run_logistic_regression(movies, negative, positive):
+    MSE = 0.0
+    for index in range(0, 5):
+        train_movies = []
+        test_movies = []
+        for movie in movies:
+            if randint(0, 9) < 2:
+                test_movies.append(movie)
+            else:
+                train_movies.append(movie)
+
+        print 'train len - ' + str(len(train_movies))
+        print 'test len - ' + str(len(test_movies))
+
+        fold_mse = run_liblinear(train_movies, test_movies, movies, negative, positive, '-q')
+        MSE += fold_mse
+    print "logistic regression MSE: " + str(MSE / 5)
 
 
 def build_liblinear_vectors(input_base, input):
@@ -326,19 +437,9 @@ def build_liblinear_vectors(input_base, input):
     print 'lexicon pos: ' + str(len(positive))
     print 'lexicon neg: ' + str(len(negative))
 
-    train_movies = []
-    test_movies = []
-    for movie in movies:
-        if randint(0, 9) < 2:
-            test_movies.append(movie)
-        else:
-            train_movies.append(movie)
-
-    print 'train len - ' + str(len(train_movies))
-    print 'test len - ' + str(len(test_movies))
-
+    run_logistic_regression(movies, negative, positive)
     run_liblinear_kfold(movies, negative, positive, '-s 11 -v 5 -q')
-
+    run_ordinal(movies, negative, positive)
 
 if __name__ == '__main__':
     build_liblinear_vectors(INPUT_BASE, INPUT)
