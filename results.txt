@@ -190,3 +190,26 @@ emo neg len: 77
 total set len 347
 Cross Validation Mean squared error = 0.514694
 Cross Validation Squared correlation coefficient = 0.698917
+
+MEAN ABSOLUTE ERROR (ORDINAL LOGISTIC):    0.673137254902
+MEAN SQUARED ERROR (ORDINAL LOGISTIC):    1.43764705882
+
+MSE logistic regression:		1.04058816797
+
+article графика с класовете
+резултатите в таблица, трафика
+	3 варианта за пълния брой класове и за закръглени нагоре и за 3 класа(пос, нег, неу)
+	
+	
+	
+5 класа:
+MEAN SQUARED ERROR (ORDINAL LOGISTIC):    1.2762745098
+logistic regression MSE: 0.66641646495
+linear MSE: 0.498819744133
+
+3 класа:
+MEAN SQUARED ERROR (ORDINAL LOGISTIC):    0.463529411765
+logistic regression MSE: 0.141068415498
+linear MSE: 0.139131827141
+
+
