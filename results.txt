@@ -137,7 +137,7 @@ global_user_ave len 3395
 emo pos len: 123
 emo neg len: 77
 total set len 347
-Cross Validation Mean squared error = 1.00718
+Cross Validation Mean squared error = 1.00718 ()
 Cross Validation Squared correlation coefficient = 0.416955
 
 11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
@@ -154,7 +154,7 @@ global_user_ave len 3395
 emo pos len: 123
 emo neg len: 77
 total set len 347
-Cross Validation Mean squared error = 0.990904
+Cross Validation Mean squared error = 0.990904 (0.016)
 Cross Validation Squared correlation coefficient = 0.430709
 
 11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
@@ -171,7 +171,7 @@ global_user_ave len 3395
 emo pos len: 123
 emo neg len: 77
 total set len 347
-Cross Validation Mean squared error = 0.939626
+Cross Validation Mean squared error = 0.939626 (0.051) 
 Cross Validation Squared correlation coefficient = 0.453564
 
 11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
@@ -191,25 +191,277 @@ total set len 347
 Cross Validation Mean squared error = 0.514694
 Cross Validation Squared correlation coefficient = 0.698917
 
-MEAN ABSOLUTE ERROR (ORDINAL LOGISTIC):    0.673137254902
-MEAN SQUARED ERROR (ORDINAL LOGISTIC):    1.43764705882
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+lexicon scores, bag of words, emoticons, length, imdb_score, cinexio_score
+# features: 8611
+global_dict len 8406
+global_bigrams len 17981
+global_directors len 317
+global_actors len 1668
+global_countries len 49
+global_genres len 23
+global_user_ave len 3395
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 0.735477
+Cross Validation Squared correlation coefficient = 0.567377
+linear MSE: 0.735477016279
 
-MSE logistic regression:		1.04058816797
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+lexicon scores, bag of words, emoticons, length, imdb_score, user_ave_ratings
+len x: 10198
+# features: 8611
+global_dict len 8406
+global_bigrams len 17981
+global_directors len 317
+global_actors len 1668
+global_countries len 49
+global_genres len 23
+global_user_ave len 3395
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 0.544149
+Cross Validation Squared correlation coefficient = 0.67911
+linear MSE: 0.544148857845
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+lexicon scores, bag of words, emoticons, length, cinexio_score, user_ave_ratings
+len x: 10198
+# features: 8611
+global_dict len 8406
+global_bigrams len 17981
+global_directors len 317
+global_actors len 1668
+global_countries len 49
+global_genres len 23
+global_user_ave len 3395
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 0.496739
+Cross Validation Squared correlation coefficient = 0.707014
+linear MSE: 0.49673854045
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+lexicon scores, bag of words, emoticons, length, user_ave_ratings
+len x: 10198
+# features: 8610
+global_dict len 8406
+global_bigrams len 17981
+global_directors len 317
+global_actors len 1668
+global_countries len 49
+global_genres len 23
+global_user_ave len 3395
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 0.761331
+Cross Validation Squared correlation coefficient = 0.568918
+linear MSE: 0.761330875084
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+lexicon scores, bag of words, emoticons, length
+# features: 8609
+global_dict len 8406
+global_bigrams len 17981
+global_directors len 317
+global_actors len 1668
+global_countries len 49
+global_genres len 23
+global_user_ave len 3395
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 1.31049
+Cross Validation Squared correlation coefficient = 0.33579
+linear MSE: 1.31049210955
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+lexicon scores, bag of words, emoticons, user_ave_ratings
+len x: 10198
+# features: 8609
+global_dict len 8406
+global_bigrams len 17981
+global_directors len 317
+global_actors len 1668
+global_countries len 49
+global_genres len 23
+global_user_ave len 3395
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 0.520393
+Cross Validation Squared correlation coefficient = 0.695715
+linear MSE: 0.520392893097
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+lexicon scores, bag of words, emoticons, cinexio score
+len x: 10198
+# features: 8609
+global_dict len 8406
+global_bigrams len 17981
+global_directors len 317
+global_actors len 1668
+global_countries len 49
+global_genres len 23
+global_user_ave len 3395
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 0.669437
+Cross Validation Squared correlation coefficient = 0.610179
+linear MSE: 0.669436687381
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+lexicon scores, bag of words, emoticons, imdb score
+len x: 10198
+# features: 8609
+global_dict len 8406
+global_bigrams len 17981
+global_directors len 317
+global_actors len 1668
+global_countries len 49
+global_genres len 23
+global_user_ave len 3395
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 0.689223
+Cross Validation Squared correlation coefficient = 0.597099
+linear MSE: 0.689222880917
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+lexicon scores, bag of words, emoticons, cinexio_score, user_ave_ratings
+len x: 10198
+# features: 8610
+global_dict len 8406
+global_bigrams len 17981
+global_directors len 317
+global_actors len 1668
+global_countries len 49
+global_genres len 23
+global_user_ave len 3395
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 0.483504
+Cross Validation Squared correlation coefficient = 0.71535
+linear MSE: 0.483504420708
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+lexicon scores, bag of words, emoticons, cinexio_score, imdb_score
+len x: 10198
+# features: 8610
+global_dict len 8406
+global_bigrams len 17981
+global_directors len 317
+global_actors len 1668
+global_countries len 49
+global_genres len 23
+global_user_ave len 3395
+emo pos len: 123
+emo neg len: 77
+total set len 347
+Cross Validation Mean squared error = 0.658096
+Cross Validation Squared correlation coefficient = 0.61376
+linear MSE: 0.658096358882
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+lexicon scores, bag of words, emoticons, directors
+Cross Validation Squared correlation coefficient = 0.581358
+linear MSE: 0.731694131851
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+lexicon scores, bag of words, emoticons, actors
+linear MSE: 0.723455461862
+
+11 -- L2-regularized L2-loss support vector regression (primal) - 5 fold CV
+lexicon scores, bag of words, emiricons, country
+linear MSE: 0.723180193351
+
 
 article графика с класовете
-резултатите в таблица, трафика
+резултатите в таблица, графика
 	3 варианта за пълния брой класове и за закръглени нагоре и за 3 класа(пос, нег, неу)
-	
-	
+
+10 класа:
+MEAN SQUARED ERROR (ORDINAL LOGISTIC):    1.43764705882
+MSE logistic regression:		1.04058816797
+linear regression Mean squared error = 0.484	
 	
 5 класа:
 MEAN SQUARED ERROR (ORDINAL LOGISTIC):    1.2762745098
 logistic regression MSE: 0.66641646495
-linear MSE: 0.498819744133
+linear MSE: 0.472290226725
 
 3 класа:
 MEAN SQUARED ERROR (ORDINAL LOGISTIC):    0.463529411765
 logistic regression MSE: 0.141068415498
-linear MSE: 0.139131827141
+linear MSE: 0.13495933479
+
+
+
+10 class
+all features 
+(lexicon scores, bag of words, emoticons, length, imdb_rating, cinexio_score, director, actors, country, genres, user_ave_ratings)
+Cross Validation Mean squared error = 0.514702
+Cross Validation Squared correlation coefficient = 0.698916
+linear MSE: 0.514701936032
+
+all features - lexicon scores
+Cross Validation Mean squared error = 0.745226
+Cross Validation Squared correlation coefficient = 0.569759
+linear MSE: 0.745225943477
+
+all features - bag of words
+Cross Validation Mean squared error = 0.522968
+Cross Validation Squared correlation coefficient = 0.691593
+linear MSE: 0.522968134552
+
+all features - emoticons
+Cross Validation Mean squared error = 0.515138
+Cross Validation Squared correlation coefficient = 0.698671
+linear MSE: 0.515137793916
+
+all features - length
+Cross Validation Mean squared error = 0.515138
+Cross Validation Squared correlation coefficient = 0.698671
+linear MSE: 0.515137793916
+
+all features - imdb_rating
+Cross Validation Mean squared error = 0.493767
+Cross Validation Squared correlation coefficient = 0.708752
+linear MSE: 0.493767088329
+
+all features - cinexio_rating
+Cross Validation Mean squared error = 0.544165
+Cross Validation Squared correlation coefficient = 0.679099
+linear MSE: 0.544165167561
+
+all features - director
+Cross Validation Mean squared error = 0.514702
+Cross Validation Squared correlation coefficient = 0.698916
+linear MSE: 0.514702099231
+
+all features - actors
+Cross Validation Mean squared error = 0.514694
+Cross Validation Squared correlation coefficient = 0.698917
+linear MSE: 0.514694203631
+
+all features - country
+Cross Validation Mean squared error = 0.514702
+Cross Validation Squared correlation coefficient = 0.698916
+linear MSE: 0.514701936032
+
+all features - genres
+Cross Validation Mean squared error = 0.514702
+Cross Validation Squared correlation coefficient = 0.698916
+linear MSE: 0.514701936032
+
+all features - user ave score
+
 
 

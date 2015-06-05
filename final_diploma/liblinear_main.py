@@ -1,6 +1,7 @@
 __author__ = 'inspir3d'
 
 import math
+import collections
 import codecs
 import review_util
 from liblinearutil import *
@@ -34,12 +35,7 @@ def add_vector_class(vector, review_rating):
     vector.append(vector_class)
 
 def add_vector_regression_score(vector, review_rating):
-    if review_rating >= POSITIVE_BOUNDARY:
-        vector.append(2.0)
-    elif POSITIVE_BOUNDARY > review_rating >= NEGATIVE_BOUNDARY:
-        vector.append(1.0)
-    else:
-        vector.append(0.0)
+        vector.append(review_rating)
 
 
 def get_clean_tokens(review_text):
@@ -263,21 +259,21 @@ def getX_Y(global_user_ave, global_word_list, movies, neg_emoticons, negative_le
             vector = []
 
             # text features
-            add_vector_regression_score(y, review_rating)
-            add_lexicon_scores(negative_lex, positive_lex, review_text, vector)
-            add_bag_of_words(global_word_list, review_text, vector)
-            add_emoticon_features(neg_emoticons, pos_emoticons, review_text, vector)
+            add_vector_regression_score(y, review_rating) # 1
+            add_lexicon_scores(negative_lex, positive_lex, review_text, vector) # 2
+            add_bag_of_words(global_word_list, review_text, vector) # 8406
+            add_emoticon_features(neg_emoticons, pos_emoticons, review_text, vector) # 123 + 77
             # add_bigrams(global_bigrams, review_text, vector)
 
             # context features
-            add_movie_len(movie_dict['length'], vector)
-            add_movie_imdb_rating(movie_dict['imdb_rating'], vector)
-            add_movie_cinexio_rating(movie_dict['cinexio_rating'], vector)
-            # add_director(global_directors, movie_dict['director'], vector)
-            # add_actors(global_actors, movie_dict['actors'], vector)
-            # add_country(global_countries, movie_dict['country'], vector)
-            # add_genres(global_genres, movie_dict['genres'], vector)
-            add_user_ave(global_user_ave[review_dict['r_name']], vector)
+            add_movie_len(movie_dict['length'], vector) # 1
+            add_movie_imdb_rating(movie_dict['imdb_rating'], vector) # 1
+            add_movie_cinexio_rating(movie_dict['cinexio_rating'], vector) # 1
+            add_director(global_user_ave, movie_dict['director'], vector)
+            add_actors(global_user_ave, movie_dict['actors'], vector)
+            add_country(global_user_ave, movie_dict['country'], vector)
+            add_genres(global_user_ave, movie_dict['genres'], vector)
+            # add_user_ave(global_user_ave[review_dict['r_name']], vector) # 1
 
             # add user average rating for genre
             # add user average rating for country
@@ -300,8 +296,8 @@ def run_liblinear(train_movies, test_movies, global_movies, negative_lex, positi
     global_genres = get_genres(global_movies)
     global_user_ave = get_user_average_rating(global_movies)
 
-    trainx, trainy = getX_Y(global_user_ave, global_word_list, train_movies, neg_emoticons, negative_lex, pos_emoticons, positive_lex)
-    testx, testy = getX_Y(global_user_ave, global_word_list, test_movies, neg_emoticons, negative_lex, pos_emoticons, positive_lex)
+    trainx, trainy = getX_Y(global_countries, global_word_list, train_movies, neg_emoticons, negative_lex, pos_emoticons, positive_lex)
+    testx, testy = getX_Y(global_countries, global_word_list, test_movies, neg_emoticons, negative_lex, pos_emoticons, positive_lex)
     print 'len train x: ' + str(len(trainx))
     print 'len test x: ' + str(len(testx))
     print '# features: ' + str(len(trainx[0]))
@@ -417,7 +413,31 @@ def run_logistic_regression(movies, negative, positive):
 
 def build_liblinear_vectors(input_base, input):
     movies = review_util.movies_as_list(input_base, input)
+    print "movies len: " + str(len(movies))
 
+    ave_histogram_rating = dict()
+    for movie in movies:
+        imdb_rating = movie['imdb_rating']
+        cinexio_rating = movie['cinexio_rating']
+        if imdb_rating == 'null':
+            imdb_rating = '0.0'
+        if cinexio_rating == 'null':
+            cinexio_rating = '0.0'
+
+        if float(cinexio_rating) < 2.5:
+            print movie['name']
+        if cinexio_rating not in ave_histogram_rating:
+            ave_histogram_rating[cinexio_rating] = (float(imdb_rating), 1)
+        else:
+            ave_histogram_rating[cinexio_rating] = (ave_histogram_rating[cinexio_rating][0] + float(imdb_rating), ave_histogram_rating[cinexio_rating][1] + 1)
+
+    ordered = collections.OrderedDict(sorted(ave_histogram_rating.items()))
+    for key in ordered:
+        print "("+str(key) + "," + str(ordered[key][0]/ordered[key][1]) +")" + str(ordered[key][1])
+
+    print 'done'
+
+    ###
     positive = {}
     with codecs.open(LEXICON_IN_BASE + FILE_SEPARATOR + LEXICON_POSITIVE, 'r', encoding='utf-8') as pos:
         for line in pos:
@@ -437,9 +457,10 @@ def build_liblinear_vectors(input_base, input):
     print 'lexicon pos: ' + str(len(positive))
     print 'lexicon neg: ' + str(len(negative))
 
-    run_logistic_regression(movies, negative, positive)
+    # run_logistic_regression(movies, negative, positive)
     run_liblinear_kfold(movies, negative, positive, '-s 11 -v 5 -q')
-    run_ordinal(movies, negative, positive)
+    # run_ordinal(movies, negative, positive)
+    ###
 
 if __name__ == '__main__':
     build_liblinear_vectors(INPUT_BASE, INPUT)
