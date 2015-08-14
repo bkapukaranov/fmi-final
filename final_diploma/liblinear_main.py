@@ -248,7 +248,7 @@ def add_user_ave(user_ave_rating, vector):
     vector.append(user_ave_rating)
 
 
-def getX_Y(global_user_ave, global_word_list, movies, neg_emoticons, negative_lex, pos_emoticons, positive_lex):
+def getX_Y(global_user_ave, global_word_list, movies, neg_emoticons, negative_lex, pos_emoticons, positive_lex, output):
     y = []
     x = []
     for movie_dict in movies:
@@ -266,19 +266,19 @@ def getX_Y(global_user_ave, global_word_list, movies, neg_emoticons, negative_le
             # add_bigrams(global_bigrams, review_text, vector)
 
             # context features
-            add_movie_len(movie_dict['length'], vector) # 1
-            add_movie_imdb_rating(movie_dict['imdb_rating'], vector) # 1
+            # add_movie_len(movie_dict['length'], vector) # 1
+            # add_movie_imdb_rating(movie_dict['imdb_rating'], vector) # 1
             add_movie_cinexio_rating(movie_dict['cinexio_rating'], vector) # 1
-            add_director(global_user_ave, movie_dict['director'], vector)
-            add_actors(global_user_ave, movie_dict['actors'], vector)
-            add_country(global_user_ave, movie_dict['country'], vector)
-            add_genres(global_user_ave, movie_dict['genres'], vector)
-            # add_user_ave(global_user_ave[review_dict['r_name']], vector) # 1
+            # add_director(global_user_ave, movie_dict['director'], vector)
+            # add_actors(global_user_ave, movie_dict['actors'], vector)
+            # add_country(global_user_ave, movie_dict['country'], vector)
+            # add_genres(global_user_ave, movie_dict['genres'], vector)
+            add_user_ave(global_user_ave[review_dict['r_name']], vector) # 1
 
             # add user average rating for genre
             # add user average rating for country
 
-            with open(OUTPUT_BASE + FILE_SEPARATOR + OUTPUT_TRAIN, 'a') as out:
+            with open(OUTPUT_BASE + FILE_SEPARATOR + output, 'a') as out:
                 write_vector(out, review_rating, vector)
 
             x.append(vector)
@@ -296,8 +296,8 @@ def run_liblinear(train_movies, test_movies, global_movies, negative_lex, positi
     global_genres = get_genres(global_movies)
     global_user_ave = get_user_average_rating(global_movies)
 
-    trainx, trainy = getX_Y(global_countries, global_word_list, train_movies, neg_emoticons, negative_lex, pos_emoticons, positive_lex)
-    testx, testy = getX_Y(global_countries, global_word_list, test_movies, neg_emoticons, negative_lex, pos_emoticons, positive_lex)
+    trainx, trainy = getX_Y(global_user_ave, global_word_list, train_movies, neg_emoticons, negative_lex, pos_emoticons, positive_lex, OUTPUT_TRAIN)
+    testx, testy = getX_Y(global_user_ave, global_word_list, test_movies, neg_emoticons, negative_lex, pos_emoticons, positive_lex, OUTPUT_TEST)
     print 'len train x: ' + str(len(trainx))
     print 'len test x: ' + str(len(testx))
     print '# features: ' + str(len(trainx[0]))
@@ -337,7 +337,7 @@ def run_liblinear_kfold(movies, negative_lex, positive_lex, params):
     global_genres = get_genres(movies)
     global_user_ave = get_user_average_rating(movies)
 
-    x, y = getX_Y(global_user_ave, global_word_list, movies, neg_emoticons, negative_lex, pos_emoticons, positive_lex)
+    x, y = getX_Y(global_user_ave, global_word_list, movies, neg_emoticons, negative_lex, pos_emoticons, positive_lex, "data.set")
     print 'len x: ' + str(len(x))
     print '# features: ' + str(len(x[0]))
     print 'global_dict len ' + str(len(global_word_list))
@@ -354,7 +354,7 @@ def run_liblinear_kfold(movies, negative_lex, positive_lex, params):
 
     MSE = train(y, x, params)
 
-    print "linear MSE: " + str(MSE)
+    print "linear MAE: " + str(MSE)
 
 
 def run_ordinal(movies, negative_lex, positive_lex):
@@ -364,7 +364,7 @@ def run_ordinal(movies, negative_lex, positive_lex):
     neg_emoticons, pos_emoticons = get_emoticon_lists()
     global_user_ave = get_user_average_rating(movies)
 
-    Xa, ya = getX_Y(global_user_ave, global_word_list, movies, neg_emoticons, negative_lex, pos_emoticons, positive_lex)
+    Xa, ya = getX_Y(global_user_ave, global_word_list, movies, neg_emoticons, negative_lex, pos_emoticons, positive_lex, "data.set")
     X = np.asarray(Xa)
     y = np.round(ya)
     y -= y.min()
@@ -409,6 +409,28 @@ def run_logistic_regression(movies, negative, positive):
         fold_mse = run_liblinear(train_movies, test_movies, movies, negative, positive, '-q')
         MSE += fold_mse
     print "logistic regression MSE: " + str(MSE / 5)
+
+def generate_vector_files(movies, negative_lex, positive_lex):
+    for index in range(0, 5):
+        train_movies = []
+        test_movies = []
+        for movie in movies:
+            if randint(0, 9) < 2:
+                test_movies.append(movie)
+            else:
+                train_movies.append(movie)
+
+        print 'train len - ' + str(len(train_movies))
+        print 'test len - ' + str(len(test_movies))
+
+        global_word_list = get_globals(movies)
+        neg_emoticons, pos_emoticons = get_emoticon_lists()
+        global_user_ave = get_user_average_rating(movies)
+
+        getX_Y(global_user_ave, global_word_list, train_movies, neg_emoticons, negative_lex, pos_emoticons, positive_lex, OUTPUT_TRAIN + str(index))
+        getX_Y(global_user_ave, global_word_list, test_movies, neg_emoticons, negative_lex, pos_emoticons, positive_lex, OUTPUT_TEST + str(index))
+
+    print "printed train/test sets"
 
 
 def build_liblinear_vectors(input_base, input):
@@ -457,6 +479,7 @@ def build_liblinear_vectors(input_base, input):
     print 'lexicon pos: ' + str(len(positive))
     print 'lexicon neg: ' + str(len(negative))
 
+    # generate_vector_files(movies, negative, positive)
     # run_logistic_regression(movies, negative, positive)
     run_liblinear_kfold(movies, negative, positive, '-s 11 -v 5 -q')
     # run_ordinal(movies, negative, positive)
